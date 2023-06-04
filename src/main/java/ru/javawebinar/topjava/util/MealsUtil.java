@@ -48,16 +48,16 @@ public class MealsUtil {
                 .collect(Collectors.toList());
     }
 
-    public static List<MealTo> getAllMealTo() {
-       return MealsUtil.filteredByStreams(
-                MealsUtil.getMealsList(),
+    private static MealTo createTo(Meal meal, boolean excess) {
+        return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+    }
+
+    public static List<MealTo> convertToMealTo(List<Meal> meals) {
+        return MealsUtil.filteredByStreams(
+                meals,
                 LocalTime.of(0, 0),
                 LocalTime.of(23, 59),
                 MealsUtil.MAX_CALORIES_PER_DAY
         );
-    }
-
-    private static MealTo createTo(Meal meal, boolean excess) {
-        return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 }

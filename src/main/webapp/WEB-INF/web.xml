@@ -5,6 +5,16 @@
          version="4.0">
 
     <display-name>TopJava</display-name>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
 
     <servlet>
         <servlet-name>userServlet</servlet-name>
@@ -23,6 +33,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>mealServlet</servlet-name>
-        <url-pattern>/meals</url-pattern>
+        <url-pattern>/MealServlet</url-pattern>
     </servlet-mapping>
+
 </web-app>
