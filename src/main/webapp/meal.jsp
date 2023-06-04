@@ -25,6 +25,7 @@
         value="<c:out value="${meal.calories}" />"/> <br/>
 
     <input type="submit" value="Сохранить"/>
+    <button onclick="window.history.back()" type="button">Cancel</button>
 </form>
 </body>
 </html>

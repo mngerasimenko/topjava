@@ -2,13 +2,13 @@ package ru.javawebinar.topjava.dao;
 
 import ru.javawebinar.topjava.model.Meal;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealsInMemoryDao implements MealDao {
 
-    private static final List<Meal> mealsList = new ArrayList<>();
+    private static final List<Meal> mealsList = new CopyOnWriteArrayList<>();
     private static final AtomicInteger idCounter = new AtomicInteger(0);
 
     @Override
