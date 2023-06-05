@@ -22,7 +22,7 @@
         TABLE {
             border-collapse: collapse;
             border: 1px solid black;
-            width: 450px;
+            width: 500px;
         }
 
         TD, TH {
@@ -31,6 +31,7 @@
             text-align: left;
         }
     </style>
+    <p><a href="meals?action=insert">Add Meal</a></p>
     <tr>
         <th>Дата</th>
         <th>Описание</th>
@@ -42,10 +43,12 @@
             <td>
                 <fmt:parseDate value="${mealTo.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
                                type="both"/>
-                <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${parsedDateTime}"/>
+                <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${parsedDateTime}"/>
             </td>
-            <td><c:out value="${mealTo.description}"/></td>
-            <td><c:out value="${mealTo.calories}"/></td>
+            <td>${mealTo.description}</td>
+            <td>${mealTo.calories}</td>
+            <td><a href="meals?action=edit&mealId=${mealTo.id}">Edit</a></td>
+            <td><a href="meals?action=delete&mealId=${mealTo.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
