@@ -103,8 +103,8 @@ public class MealServlet extends HttpServlet {
             Meal meal = dao.update(newMeal);
             log.debug("Update meal {}", meal);
         }
-        RequestDispatcher view = request.getRequestDispatcher(LIST_MEALS);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(LIST_MEALS);
         request.setAttribute("mealTos", MealsUtil.convertToMealTo(dao.getAll(), MealsUtil.MAX_CALORIES_PER_DAY));
-        view.forward(request, response);
+        requestDispatcher.forward(request, response);
     }
 }

@@ -7,7 +7,7 @@
 <head>
     <link type="text/css" rel="stylesheet"/>
 
-    <title>Add/Edit  user</title>
+    <title>Add/Edit  meal</title>
 </head>
 <body>
 <br/>
@@ -22,7 +22,7 @@ ${meal.id == null ? 'Add Meal' : 'Edit Meal'}
     Описание : <input
         type="text" name="description"
         value="${meal.description}"/> <br/>
-    Калории : <input
+    Калории : <input onkeyup="value=value.replace(/[^\d]/g,'')"
         type="text" name="calories"
         value="${meal.calories}"/> <br/>
 
