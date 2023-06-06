@@ -52,7 +52,6 @@ public class MealsUtil {
     }
 
     public static List<MealTo> convertToMealTo(List<Meal> meals, int caloriesPerDay) {
-        return MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0),
-                LocalTime.of(LocalTime.MAX.getHour(), LocalTime.MAX.getMinute()), caloriesPerDay);
+        return MealsUtil.filteredByStreams(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
     }
 }
