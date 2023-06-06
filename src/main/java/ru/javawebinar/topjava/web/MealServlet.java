@@ -24,7 +24,6 @@ public class MealServlet extends HttpServlet {
 
     public void init() {
         dao = new InMemoryMealDao();
-        dao.addAll(MealsUtil.getMealsList());
     }
 
     @Override
@@ -62,7 +61,6 @@ public class MealServlet extends HttpServlet {
         int mealId = Integer.parseInt(request.getParameter("mealId"));
         dao.delete(mealId);
         log.debug("Delete meal id: {}", mealId);
-
         request.setAttribute("mealTos", MealsUtil.convertToMealTo(dao.getAll(), MealsUtil.MAX_CALORIES_PER_DAY));
     }
 
@@ -70,15 +68,12 @@ public class MealServlet extends HttpServlet {
         int mealId = Integer.parseInt(request.getParameter("mealId"));
         Meal meal = dao.getById(mealId);
         log.debug("Edit meal id: {}", mealId);
-
         request.setAttribute("meal", meal);
     }
 
     private void insert(HttpServletRequest request) {
         Meal meal = new Meal(LocalDateTime.now(), "", 0);
-
         log.debug("Insert new meal");
-
         request.setAttribute("meal", meal);
     }
 
