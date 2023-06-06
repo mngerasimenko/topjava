@@ -7,28 +7,35 @@
 <head>
     <link type="text/css" rel="stylesheet"/>
 
+    <li><a href="<%=request.getContextPath()%>/meals">Meals</a></li>
+
     <title>Add/Edit meal</title>
 </head>
 <body>
 <br/>
-${meal.id == null ? 'Add Meal' : 'Edit Meal'}
+    <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
+    <c:if test="${meal.id != null}">
+        Edit Meal
+        <form action="meals?action=update" method="post">
+    </c:if>
+    <c:if test="${meal.id == null}">
+        Add Meal
+        <form action="meals?action=insert" method="post">
+    </c:if>
+        <br/>
+        Дата : <input
+            type="datetime-local" name="dateTime"
+            value="${meal.dateTime}"/> <br/>
+        Описание : <input
+            type="text" name="description"
+            value="${meal.description}"/> <br/>
+        Калории : <input onkeyup="value=value.replace(/[^\d]/g,'')"
+                         type="number" name="calories"
+                         value="${meal.calories}"/> <br/>
 
-<br/>
-<form method="POST" action='meals' name="frmAddMeal">
-    <br/>
-    Дата : <input
-        type="datetime-local" name="dateTime"
-        value="${meal.dateTime}"/> <br/>
-    Описание : <input
-        type="text" name="description"
-        value="${meal.description}"/> <br/>
-    Калории : <input onkeyup="value=value.replace(/[^\d]/g,'')"
-                     type="number" name="calories"
-                     value="${meal.calories}"/> <br/>
-
-    <input hidden type="text" name="mealId" value="${meal.id}"/> <br/>
-    <input type="submit" value="Сохранить"/>
-    <button onclick="window.history.back()" type="button">Cancel</button>
-</form>
+        <input hidden type="text" name="mealId" value="${meal.id}"/> <br/>
+        <button type="submit"> Сохранить</button>
+        <button onclick="window.history.back()" type="button">Cancel</button>
+    </form>
 </body>
 </html>

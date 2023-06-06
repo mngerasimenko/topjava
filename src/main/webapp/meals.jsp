@@ -13,6 +13,7 @@
 
 <h2>Meals</h2>
 
+<li><a href="<%=request.getContextPath()%>/meals">Meals</a></li>
 <table>
     <style type="text/css">
         BODY {
@@ -31,14 +32,14 @@
             text-align: left;
         }
     </style>
-    <p><a href="meals?action=insert">Add Meal</a></p>
+    <p><a href="meals?action=new">Add Meal</a></p>
     <tr>
         <th>Дата</th>
         <th>Описание</th>
         <th>Калории</th>
     </tr>
-    <jsp:useBean id="mealTos" scope="request" type="java.util.List"/>
-    <c:forEach items="${mealTos}" var="mealTo">
+
+    <c:forEach items="${mealToList}" var="mealTo">
         <tr style="color:${mealTo.excess ? 'red' : 'green'}">
             <td>
                 <fmt:parseDate value="${mealTo.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
