@@ -17,6 +17,10 @@ public class InMemoryMealDao implements MealDao {
         addAll(MealsUtil.getMealsList());
     }
 
+    private void addAll(List<Meal> meals) {
+        meals.forEach(this::add);
+    }
+
     @Override
     public Meal add(Meal meal) {
         int id = idCounter.getAndIncrement();
@@ -25,24 +29,17 @@ public class InMemoryMealDao implements MealDao {
         return meal;
     }
 
-    public List<Meal> addAll(List<Meal> meals) {
-        meals.forEach(this::add);
-        return getAll();
-    }
-
     @Override
-    public synchronized Meal update(Meal newMeal) {
+    public Meal update(Meal newMeal) {
         Meal meal = getById(newMeal.getId());
-        meal.setDateTime(newMeal.getDateTime());
-        meal.setDescription(newMeal.getDescription());
-        meal.setCalories(newMeal.getCalories());
-        return meal;
+        return mealsMap.replace(meal.getId(), meal, newMeal)
+                ? meal
+                : null;
     }
 
     @Override
     public void delete(int mealId) {
-        Meal meal = getById(mealId);
-        mealsMap.remove(meal.getId());
+        mealsMap.remove(mealId);
     }
 
     @Override
