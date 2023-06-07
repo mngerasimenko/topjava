@@ -14,14 +14,10 @@
 <body>
 <br/>
     <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
-    <c:if test="${meal.id != null}">
-        Edit Meal
-        <form action="meals?action=update" method="post">
-    </c:if>
-    <c:if test="${meal.id == null}">
-        Add Meal
-        <form action="meals?action=insert" method="post">
-    </c:if>
+
+    ${meal.id == null ? 'Add Meal' : 'Edit Meal'}
+    <br/>
+    <form method="POST" action='meals' name="frmAddEditMeal">
         <br/>
         Дата : <input
             type="datetime-local" name="dateTime"

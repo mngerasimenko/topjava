@@ -33,7 +33,7 @@ public class InMemoryMealDao implements MealDao {
     public Meal update(Meal newMeal) {
         Meal meal = getById(newMeal.getId());
         return mealsMap.replace(meal.getId(), meal, newMeal)
-                ? meal
+                ? getById(meal.getId())
                 : null;
     }
 

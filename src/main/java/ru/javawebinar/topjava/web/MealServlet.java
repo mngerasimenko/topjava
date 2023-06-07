@@ -20,26 +20,12 @@ import java.util.List;
 
 
 public class MealServlet extends HttpServlet {
-    private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private static final long serialVersionUID = 1L;
+    private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private MealDao dao;
 
     public void init() {
         dao = new InMemoryMealDao();
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        switch (getAction(request)) {
-            case "insert":
-                insertMeal(request, response);
-                break;
-            case "update":
-                updateMeal(request, response);
-                break;
-            default:
-                listMeals(request, response);
-        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -85,33 +71,39 @@ public class MealServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void insertMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String description = request.getParameter("description");
-        int calories = Integer.parseInt(request.getParameter("calories"));
-        LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
-        Meal newMeal = new Meal(dateTime, description, calories);
-        dao.add(newMeal);
-        log.debug("Added new meal {}", newMeal);
-        response.sendRedirect(request.getContextPath() + "/meals");
-    }
-
-    private void updateMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int id = Integer.parseInt(request.getParameter("mealId"));
-        String description = request.getParameter("description");
-        int calories = Integer.parseInt(request.getParameter("calories"));
-        LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
-
-        Meal meal = new Meal(id, dateTime, description, calories);
-        dao.update(meal);
-        log.debug("Update meal {}", meal);
-        response.sendRedirect(request.getContextPath() + "/meals");
-    }
-
     private void deleteMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("mealId"));
         Meal meal = dao.getById(id);
         dao.delete(id);
         log.debug("Delete meal {}", meal);
         response.sendRedirect(request.getContextPath() + "/meals");
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        String mealId = request.getParameter("mealId");
+        String description = request.getParameter("description");
+        int calories = Integer.parseInt(request.getParameter("calories"));
+        LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
+
+        if (mealId == null || mealId.isEmpty()) {
+            Meal meal = new Meal(dateTime, description, calories);
+            insertMeal(meal);
+        } else {
+            Meal meal = new Meal(Integer.parseInt(mealId), dateTime, description, calories);
+            updateMeal(meal);
+        }
+
+        response.sendRedirect(request.getContextPath() + "/meals");
+    }
+
+    private void insertMeal(Meal newMeal) {
+        dao.add(newMeal);
+        log.debug("Added new meal {}", newMeal);
+    }
+
+    private void updateMeal(Meal meal) {
+        log.debug("Update meal {}", meal);
     }
 }
