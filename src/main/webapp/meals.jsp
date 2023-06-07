@@ -13,7 +13,6 @@
 
 <h2>Meals</h2>
 
-<li><a href="<%=request.getContextPath()%>/meals">Meals</a></li>
 <table>
     <style type="text/css">
         BODY {

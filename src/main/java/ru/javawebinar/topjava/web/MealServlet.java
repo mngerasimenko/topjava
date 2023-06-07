@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -28,35 +28,33 @@ public class MealServlet extends HttpServlet {
         dao = new InMemoryMealDao();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
-        doGet(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        switch (getAction(request)) {
+            case "insert":
+                insertMeal(request, response);
+                break;
+            case "update":
+                updateMeal(request, response);
+                break;
+            default:
+                listMeals(request, response);
+        }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, UnsupportedEncodingException {
-        request.setCharacterEncoding("UTF-8");
-        try {
-            switch (getAction(request)) {
-                case "new":
-                    showNewForm(request, response);
-                    break;
-                case "insert":
-                    insertUser(request, response);
-                    break;
-                case "delete":
-                    deleteUser(request, response);
-                    break;
-                case "edit":
-                    showEditForm(request, response);
-                    break;
-                case "update":
-                    updateUser(request, response);
-                    break;
-                default:
-                    listUser(request, response);
-                    break;
-            }
-        } catch (Exception ex) {
-            throw new ServletException(ex);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        switch (getAction(request)) {
+            case "new":
+                showNewForm(request, response);
+                break;
+            case "delete":
+                deleteMeal(request, response);
+                break;
+            case "edit":
+                showEditForm(request, response);
+                break;
+            default:
+                listMeals(request, response);
         }
     }
 
@@ -65,7 +63,7 @@ public class MealServlet extends HttpServlet {
         return action == null ? "" : action;
     }
 
-    private void listUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void listMeals(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<MealTo> mealsList = MealsUtil.convertToMealTo(dao.getAll(), MealsUtil.MAX_CALORIES_PER_DAY);
         request.setAttribute("mealToList", mealsList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/meals.jsp");
@@ -73,7 +71,7 @@ public class MealServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Meal meal = new Meal(LocalDateTime.now(), "", 0);
+        Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 0);
         request.setAttribute("meal", meal);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/meal.jsp");
         dispatcher.forward(request, response);
@@ -87,7 +85,7 @@ public class MealServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void insertUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void insertMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
@@ -97,7 +95,7 @@ public class MealServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/meals");
     }
 
-    private void updateUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void updateMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("mealId"));
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
@@ -109,10 +107,11 @@ public class MealServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/meals");
     }
 
-    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void deleteMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("mealId"));
+        Meal meal = dao.getById(id);
         dao.delete(id);
-        response.setStatus(302);
+        log.debug("Delete meal {}", meal);
         response.sendRedirect(request.getContextPath() + "/meals");
     }
 }
