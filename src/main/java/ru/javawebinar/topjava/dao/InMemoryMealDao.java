@@ -32,9 +32,10 @@ public class InMemoryMealDao implements MealDao {
     @Override
     public Meal update(Meal newMeal) {
         Meal meal = getById(newMeal.getId());
-        return mealsMap.replace(meal.getId(), meal, newMeal)
-                ? getById(meal.getId())
-                : null;
+        if (mealsMap.replace(meal.getId(), newMeal) == null) {
+            return null;
+        }
+        return newMeal;
     }
 
     @Override

@@ -73,9 +73,8 @@ public class MealServlet extends HttpServlet {
 
     private void deleteMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("mealId"));
-        Meal meal = dao.getById(id);
         dao.delete(id);
-        log.debug("Delete meal {}", meal);
+        log.debug("Delete meal id={}", id);
         response.sendRedirect(request.getContextPath() + "/meals");
     }
 
@@ -104,6 +103,7 @@ public class MealServlet extends HttpServlet {
     }
 
     private void updateMeal(Meal meal) {
+        dao.update(meal);
         log.debug("Update meal {}", meal);
     }
 }
