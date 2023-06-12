@@ -3,11 +3,14 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
-import ru.javawebinar.topjava.util.UserUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -18,8 +21,17 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
+    public static final List<User> users = Arrays.asList(
+            new User("admin", "admin@topjava.ru", "password", Role.ADMIN),
+            new User("user5", "user1@topjava.ru", "password", Role.USER),
+            new User("user3", "user2@topjava.ru", "password", Role.USER),
+            new User("user1", "user3@topjava.ru", "password", Role.USER),
+            new User("user2", "user4@topjava.ru", "password", Role.USER),
+            new User("user4", "user5@topjava.ru", "password", Role.USER)
+    );
+
     {
-        UserUtils.users.forEach(this::save);
+        users.forEach(this::save);
     }
 
     @Override
@@ -37,7 +49,7 @@ public class InMemoryUserRepository implements UserRepository {
             return user;
         }
         // handle case: update, but not present in storage
-        return repository.computeIfPresent(user.getId(), (id, oldMeal) -> user);
+        return repository.computeIfPresent(user.getId(), (id, oldUser) -> user);
     }
 
     @Override
@@ -58,7 +70,7 @@ public class InMemoryUserRepository implements UserRepository {
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
         return repository.values().stream()
-                .filter(user -> email.equals(user.getEmail()))
+                .filter(user -> email.equalsIgnoreCase(user.getEmail()))
                 .findFirst()
                 .orElse(null);
     }

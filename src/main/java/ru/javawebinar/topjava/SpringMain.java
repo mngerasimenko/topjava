@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
@@ -27,8 +28,8 @@ public class SpringMain {
 
             System.out.println("________________________________________________");
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            mealRestController.create(new Meal(1, LocalDateTime.of(2020, Month.JANUARY, 30, 22, 0), "Ужин2", 100));
-            mealRestController.getAllMealTo().forEach(System.out::println);
+            mealRestController.create(new Meal(SecurityUtil.authUserId(), LocalDateTime.of(2020, Month.JANUARY, 30, 22, 0), "Ужин2", 100));
+            mealRestController.getAll().forEach(System.out::println);
         }
     }
 }
