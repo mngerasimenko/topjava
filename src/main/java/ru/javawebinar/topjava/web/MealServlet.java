@@ -57,9 +57,9 @@ public class MealServlet extends HttpServlet {
                 break;
             case "create":
             case "update":
-                final Meal meal = "create".equals(action) ?
-                        new Meal(null, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        repository.get(getId(request));
+                final Meal meal = "create".equals(action)
+                        ? new Meal(null, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000)
+                        : repository.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
