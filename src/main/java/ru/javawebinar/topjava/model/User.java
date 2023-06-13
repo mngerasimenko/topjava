@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import org.springframework.util.CollectionUtils;
-import ru.javawebinar.topjava.web.SecurityUtil;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ public class User extends AbstractNamedEntity {
     }
 
     public User(Integer id, String name, String email, String password, Role... roles) {
-        this(id, name, email, password, SecurityUtil.authUserCaloriesPerDay(), true, Arrays.asList(roles));
+        this(id, name, email, password, MealsUtil.DEFAULT_CALORIES_PER_DAY, true, Arrays.asList(roles));
     }
 
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Collection<Role> roles) {

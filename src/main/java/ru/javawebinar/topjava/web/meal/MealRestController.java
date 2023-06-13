@@ -38,12 +38,12 @@ public class MealRestController {
 
     public Meal get(int id) {
         log.info("get {}", id);
-        return service.get(id);
+        return service.get(id, authUserId());
     }
 
-    public void delete(int id) {
+    public void delete(int id, int userId) {
         log.info("delete {}", id);
-        service.delete(id);
+        service.delete(id, userId);
     }
 
     public List<MealTo> getAll() {

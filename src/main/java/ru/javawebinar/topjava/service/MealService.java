@@ -23,12 +23,12 @@ public class MealService {
         return repository.save(meal);
     }
 
-    public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+    public void delete(int id, int userId) {
+        checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
-    public Meal get(int id) {
-        return checkNotFoundWithId(repository.get(id), id);
+    public Meal get(int id, int userId) {
+        return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
     public List<Meal> getAll(int userId) {
