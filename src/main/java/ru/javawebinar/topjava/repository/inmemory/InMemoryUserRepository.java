@@ -21,16 +21,15 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-    public static final List<User> users = Arrays.asList(
-            new User("admin", "admin@topjava.ru", "password", Role.ADMIN),
-            new User("user5", "user1@topjava.ru", "password", Role.USER),
-            new User("user3", "user2@topjava.ru", "password", Role.USER),
-            new User("user1", "user3@topjava.ru", "password", Role.USER),
-            new User("user2", "user4@topjava.ru", "password", Role.USER),
-            new User("user4", "user5@topjava.ru", "password", Role.USER)
-    );
-
     {
+        final List<User> users = Arrays.asList(
+                new User("admin", "admin@topjava.ru", "password", Role.ADMIN),
+                new User("user5", "user1@topjava.ru", "password", Role.USER),
+                new User("user3", "user2@topjava.ru", "password", Role.USER),
+                new User("user1", "user3@topjava.ru", "password", Role.USER),
+                new User("user2", "user4@topjava.ru", "password", Role.USER),
+                new User("user4", "user5@topjava.ru", "password", Role.USER)
+        );
         users.forEach(this::save);
     }
 
