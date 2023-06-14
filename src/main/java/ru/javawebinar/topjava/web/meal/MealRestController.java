@@ -24,21 +24,21 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Meal create(Meal meal) {
+    public Meal create(Meal meal, int userId) {
         log.info("Create {}", meal);
         checkNew(meal);
-        return this.service.create(meal);
+        return this.service.create(meal, userId);
     }
 
-    public void update(Meal meal, int id) {
+    public void update(Meal meal, int id, int userId) {
         log.info("update {} with id={}", meal, id);
         assureIdConsistent(meal, id);
-        service.update(meal);
+        service.update(meal, userId);
     }
 
-    public Meal get(int id) {
+    public Meal get(int id, int userId) {
         log.info("get {}", id);
-        return service.get(id, authUserId());
+        return service.get(id, userId);
     }
 
     public void delete(int id, int userId) {

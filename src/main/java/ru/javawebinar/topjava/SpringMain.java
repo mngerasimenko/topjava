@@ -28,7 +28,7 @@ public class SpringMain {
 
             System.out.println("________________________________________________");
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            mealRestController.create(new Meal(SecurityUtil.authUserId(), LocalDateTime.of(2020, Month.JANUARY, 30, 22, 0), "Ужин2", 100));
+            mealRestController.create(new Meal(SecurityUtil.authUserId(), LocalDateTime.of(2020, Month.JANUARY, 30, 22, 0), "Ужин2", 100), 1);
             mealRestController.getAll().forEach(System.out::println);
         }
     }
