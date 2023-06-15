@@ -1,5 +1,8 @@
 package ru.javawebinar.topjava.util;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,17 +14,20 @@ public class DateTimeUtil {
     public static final LocalDateTime MIN_DATE = LocalDateTime.of(1,1,1,0,0);
     public static final LocalDateTime MAX_DATE = LocalDateTime.of(3000,1,1,0,0);
 
-
-    public static boolean isBetweenHalfOpen(LocalTime lt, LocalTime startTime, LocalTime endTime) {
-        return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) < 0;
-    }
-
     public static LocalDateTime getStartInclusive(LocalDate localDate) {
         return localDate != null ? localDate.atStartOfDay() : MIN_DATE;
     }
 
     public static LocalDateTime getEndExclusive(LocalDate localDate) {
         return localDate != null ? localDate.plus(1, ChronoUnit.DAYS).atStartOfDay() : MAX_DATE;
+    }
+
+    public static @Nullable LocalTime parseLocalTime(@Nullable String time) {
+        return StringUtils.isEmpty(time) ? null : LocalTime.parse(time);
+    }
+
+    public static @Nullable LocalDate parseLocalDate(@Nullable String date) {
+        return StringUtils.isEmpty(date) ? null : LocalDate.parse(date);
     }
 
     public static String toString(LocalDateTime ldt) {
