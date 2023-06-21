@@ -13,7 +13,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
@@ -23,6 +22,8 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 
 @ContextConfiguration({
@@ -40,7 +41,7 @@ public class MealServiceTest {
     }
 
     @Autowired
-    MealService service;
+    private MealService service;
 
     @Test
     public void get() {
@@ -55,7 +56,7 @@ public class MealServiceTest {
 
     @Test
     public void getOther() {
-        assertThrows(NotFoundException.class, () -> service.get(MEAL_ID, OTHER_USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL_ID, ADMIN_ID));
     }
 
     @Test
@@ -71,14 +72,14 @@ public class MealServiceTest {
 
     @Test
     public void deleteOther() {
-        assertThrows(NotFoundException.class, () -> service.delete(MEAL_ID, OTHER_USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(MEAL_ID, ADMIN_ID));
     }
 
     @Test
     public void getBetweenInclusive() {
-        List<Meal> expected = service.getBetweenInclusive(LocalDate.of(2023, Month.JUNE, 18),
-                LocalDate.of(2023, Month.JUNE, 19), USER_ID);
-        List<Meal> actual = Stream.of(meal, meal_2)
+        List<Meal> expected = service.getBetweenInclusive(LocalDate.of(2020, Month.JANUARY, 30),
+                LocalDate.of(2020, Month.JANUARY, 30), USER_ID);
+        List<Meal> actual = Stream.of(meal, meal_2, meal_3)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
         assertThat(expected).containsExactlyInAnyOrderElementsOf(actual);
@@ -87,7 +88,7 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> expected = service.getAll(USER_ID);
-        List<Meal> actual = Stream.of(meal, meal_2, meal_3)
+        List<Meal> actual = Stream.of(meal, meal_2, meal_3, meal_4)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
         assertThat(expected).containsExactlyInAnyOrderElementsOf(actual);
@@ -103,7 +104,7 @@ public class MealServiceTest {
     @Test
     public void updateOther() {
         Meal updated = getUpdated();
-        assertThrows(NotFoundException.class, () -> service.update(updated, OTHER_USER_ID));
+        assertThrows(NotFoundException.class, () -> service.update(updated, ADMIN_ID));
     }
 
     @Test
@@ -117,16 +118,8 @@ public class MealServiceTest {
     }
 
     @Test
-    public void duplicateMailCreate() {
-        assertThrows(DataAccessException.class, () -> service.create(
-                new Meal(LocalDateTime.of(2023, Month.JUNE, 18, 9, 6),
-                        "Завтрак", 500), USER_ID));
-    }
-
-    @Test
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
-                service.create(new Meal(LocalDateTime.of(2023, Month.JUNE, 18, 9, 6),
-                        "Dublicate", 1000), USER_ID));
+                service.create(new Meal(meal.getDateTime(), "Dublicate", 1000), USER_ID));
     }
 }
