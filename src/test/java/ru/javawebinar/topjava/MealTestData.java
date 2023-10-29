@@ -6,6 +6,7 @@ import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import ru.javawebinar.topjava.model.User;
 
 import static java.time.LocalDateTime.of;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
@@ -35,5 +36,10 @@ public class MealTestData {
 
     public static Meal getUpdated() {
         return new Meal(MEAL1_ID, meal1.getDateTime().plus(2, ChronoUnit.MINUTES), "Обновленный завтрак", 200);
+    }
+
+    public static List<Meal> getMealsWithUser(List<Meal> meals, User user) {
+        meals.forEach(m -> m.setUser(user));
+        return meals;
     }
 }
