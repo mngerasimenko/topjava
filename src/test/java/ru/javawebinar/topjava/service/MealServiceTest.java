@@ -73,7 +73,6 @@ public class MealServiceTest {
     @Test
     public void get() {
         Meal actual = mealService.get(ADMIN_MEAL_ID, ADMIN_ID);
-        adminMeal1.setUser(userService.get(ADMIN_ID));
         MEAL_MATCHER.assertMatch(actual, adminMeal1);
     }
 
@@ -106,8 +105,7 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         MEAL_MATCHER.assertMatch(
-                mealService.getAll(USER_ID),
-                MealTestData.getMealsWithUser(meals, userService.get(USER_ID)));
+                mealService.getAll(USER_ID), meals);
     }
 
     @Test
