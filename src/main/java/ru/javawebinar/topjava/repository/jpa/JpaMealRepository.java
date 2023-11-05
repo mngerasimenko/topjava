@@ -15,45 +15,39 @@ import java.util.List;
 @Repository
 @Transactional(readOnly = true)
 public class JpaMealRepository implements MealRepository {
+
     @PersistenceContext
     private EntityManager em;
 
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
+        meal.setUser(em.getReference(User.class, userId));
         if (meal.isNew()) {
-            meal.setUser(em.getReference(User.class, userId));
             em.persist(meal);
             return meal;
-        } else {
-            Meal currentMeal = em.getReference(Meal.class, meal.getId());
-            User currentUser = currentMeal.getUser();
-            if (currentUser.getId() != userId) {
-                return null;
-            }
-            meal.setUser(currentUser);
-            return em.merge(meal);
         }
+        return get(meal.id(), userId) == null
+                ? null
+                : em.merge(meal);
     }
 
     @Override
     @Transactional
     public boolean delete(int id, int userId) {
-        Meal meal = em.find(Meal.class, id);
-        if (meal == null || meal.getUser().getId() != userId) {
-            return false;
-        }
-        em.remove(meal);
-        return em.find(Meal.class, id) == null;
+        em.find(Meal.class, id);
+        return em.createNamedQuery(Meal.DELETE)
+                .setParameter("id", id)
+                .setParameter("userId", userId)
+                .executeUpdate() != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = em.createNamedQuery(Meal.GET_BY_ID, Meal.class)
-                .setParameter("id", id)
-                .setParameter("userId", userId)
-                .getResultList();
-        return DataAccessUtils.singleResult(meals);
+        Meal meal = em.find(Meal.class, id);
+        return meal != null && meal.getUser().getId() == userId
+                ? meal
+                : null;
     }
 
     @Override
