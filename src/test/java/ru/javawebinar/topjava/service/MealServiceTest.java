@@ -33,7 +33,6 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-@Ignore
 public class MealServiceTest {
     private static final Logger log = getLogger("result");
 
@@ -81,7 +80,7 @@ public class MealServiceTest {
     @Test
     public void create() {
         Meal created = service.create(getNew(), USER_ID);
-        int newId = created.id();
+        int newId = created.getId();
         Meal newMeal = getNew();
         newMeal.setId(newId);
         MEAL_MATCHER.assertMatch(created, newMeal);

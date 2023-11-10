@@ -216,6 +216,27 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+
+        <profile>
+            <id>jdbc</id>
+            <dependencies>
+
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>jpa</id>
+            <dependencies>
+
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>datajpa</id>
+            <dependencies>
+
+            </dependencies>
+        </profile>
     </profiles>
 
     <dependencyManagement>

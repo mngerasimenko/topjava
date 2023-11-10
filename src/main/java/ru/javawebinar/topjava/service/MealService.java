@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import jdk.jfr.DataAmount;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -8,6 +9,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import ru.javawebinar.topjava.repository.datajpa.DataJpaMealRepository;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfDayOrMin;
 import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfNextDayOrMax;
